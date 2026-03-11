@@ -41,9 +41,37 @@ MIN: '-';
 MUL: '*';
 ASSIGNMENT_OPERATOR: ':=';
 
+// Lexer
+// Comments in this file are for me to read over it again to understand whats happening :)
 
+statement : variable | css_rule; // Either variable or css_rule
 
+variable: CAPITAL_IDENT ASSIGNMENT_OPERATOR expression SEMICOLON; // VarableName := #ffffff;
+
+css_rule: selector OPEN_BRACE body* CLOSE_BRACE; // background-color: #ff00ff;
+
+body: declaration | if_statement; // Either decleration like background-color: #ff00ff; or an If-statement.
+
+declaration: LOWER_IDENT COLON expression SEMICOLON; // see above.
+
+if_statement // if[Test] { // ... } else { // ... }
+    : IF BOX_BRACKET_OPEN condition BOX_BRACKET_CLOSE
+      OPEN_BRACE body* CLOSE_BRACE
+      else_statement?
+    ;
+
+else_statement: ELSE OPEN_BRACE body* CLOSE_BRACE;
+
+condition: CAPITAL_IDENT | TRUE | FALSE; // function condition
+
+selector: LOWER_IDENT | ID_IDENT | CLASS_IDENT; // # .help help
+
+expression: value (wiskunde value)*; //
+
+value: COLOR | PIXELSIZE | PERCENTAGE | SCALAR | TRUE | FALSE | CAPITAL_IDENT;
+
+wiskunde: MIN | PLUS | MUL;
 
 //--- PARSER: ---
-stylesheet: EOF;
+stylesheet: statement* EOF;
 
