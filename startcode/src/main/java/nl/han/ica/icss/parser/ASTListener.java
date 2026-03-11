@@ -31,5 +31,16 @@ public class ASTListener extends ICSSBaseListener {
     public AST getAST() {
         return ast;
     }
-    
+
+	@Override
+	public void enterStylesheet(ICSSParser.StylesheetContext ctx) {
+		for (ICSSParser.StatementContext statement : ctx.statement()) {
+			System.out.println(statement.getText());
+		}
+	}
+
+	@Override
+	public void exitStylesheet(ICSSParser.StylesheetContext ctx) {
+		System.out.println("Exiting stylesheet");
+	}
 }
