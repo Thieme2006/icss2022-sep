@@ -8,16 +8,6 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface ICSSListener extends ParseTreeListener {
 	/**
-	 * Enter a parse tree produced by {@link ICSSParser#statement}.
-	 * @param ctx the parse tree
-	 */
-	void enterStatement(ICSSParser.StatementContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ICSSParser#statement}.
-	 * @param ctx the parse tree
-	 */
-	void exitStatement(ICSSParser.StatementContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link ICSSParser#variable}.
 	 * @param ctx the parse tree
 	 */
@@ -27,56 +17,6 @@ public interface ICSSListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitVariable(ICSSParser.VariableContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ICSSParser#css_rule}.
-	 * @param ctx the parse tree
-	 */
-	void enterCss_rule(ICSSParser.Css_ruleContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ICSSParser#css_rule}.
-	 * @param ctx the parse tree
-	 */
-	void exitCss_rule(ICSSParser.Css_ruleContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ICSSParser#body}.
-	 * @param ctx the parse tree
-	 */
-	void enterBody(ICSSParser.BodyContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ICSSParser#body}.
-	 * @param ctx the parse tree
-	 */
-	void exitBody(ICSSParser.BodyContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ICSSParser#declaration}.
-	 * @param ctx the parse tree
-	 */
-	void enterDeclaration(ICSSParser.DeclarationContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ICSSParser#declaration}.
-	 * @param ctx the parse tree
-	 */
-	void exitDeclaration(ICSSParser.DeclarationContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ICSSParser#if_statement}.
-	 * @param ctx the parse tree
-	 */
-	void enterIf_statement(ICSSParser.If_statementContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ICSSParser#if_statement}.
-	 * @param ctx the parse tree
-	 */
-	void exitIf_statement(ICSSParser.If_statementContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link ICSSParser#condition}.
-	 * @param ctx the parse tree
-	 */
-	void enterCondition(ICSSParser.ConditionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ICSSParser#condition}.
-	 * @param ctx the parse tree
-	 */
-	void exitCondition(ICSSParser.ConditionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ICSSParser#selector}.
 	 * @param ctx the parse tree
@@ -88,16 +28,6 @@ public interface ICSSListener extends ParseTreeListener {
 	 */
 	void exitSelector(ICSSParser.SelectorContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ICSSParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void enterExpression(ICSSParser.ExpressionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link ICSSParser#expression}.
-	 * @param ctx the parse tree
-	 */
-	void exitExpression(ICSSParser.ExpressionContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link ICSSParser#value}.
 	 * @param ctx the parse tree
 	 */
@@ -108,15 +38,85 @@ public interface ICSSListener extends ParseTreeListener {
 	 */
 	void exitValue(ICSSParser.ValueContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ICSSParser#wiskunde}.
+	 * Enter a parse tree produced by {@link ICSSParser#term}.
 	 * @param ctx the parse tree
 	 */
-	void enterWiskunde(ICSSParser.WiskundeContext ctx);
+	void enterTerm(ICSSParser.TermContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ICSSParser#wiskunde}.
+	 * Exit a parse tree produced by {@link ICSSParser#term}.
 	 * @param ctx the parse tree
 	 */
-	void exitWiskunde(ICSSParser.WiskundeContext ctx);
+	void exitTerm(ICSSParser.TermContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ICSSParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterExpression(ICSSParser.ExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ICSSParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitExpression(ICSSParser.ExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ICSSParser#bodyItem}.
+	 * @param ctx the parse tree
+	 */
+	void enterBodyItem(ICSSParser.BodyItemContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ICSSParser#bodyItem}.
+	 * @param ctx the parse tree
+	 */
+	void exitBodyItem(ICSSParser.BodyItemContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ICSSParser#ifClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterIfClause(ICSSParser.IfClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ICSSParser#ifClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitIfClause(ICSSParser.IfClauseContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ICSSParser#elseClause}.
+	 * @param ctx the parse tree
+	 */
+	void enterElseClause(ICSSParser.ElseClauseContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ICSSParser#elseClause}.
+	 * @param ctx the parse tree
+	 */
+	void exitElseClause(ICSSParser.ElseClauseContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ICSSParser#declaration}.
+	 * @param ctx the parse tree
+	 */
+	void enterDeclaration(ICSSParser.DeclarationContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ICSSParser#declaration}.
+	 * @param ctx the parse tree
+	 */
+	void exitDeclaration(ICSSParser.DeclarationContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ICSSParser#block}.
+	 * @param ctx the parse tree
+	 */
+	void enterBlock(ICSSParser.BlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ICSSParser#block}.
+	 * @param ctx the parse tree
+	 */
+	void exitBlock(ICSSParser.BlockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ICSSParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterStatement(ICSSParser.StatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ICSSParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitStatement(ICSSParser.StatementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ICSSParser#stylesheet}.
 	 * @param ctx the parse tree

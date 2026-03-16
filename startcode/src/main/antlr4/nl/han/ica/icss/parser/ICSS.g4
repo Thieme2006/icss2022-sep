@@ -44,34 +44,71 @@ ASSIGNMENT_OPERATOR: ':=';
 // Lexer
 // Comments in this file are for me to read over it again to understand whats happening :)
 
-statement : variable | css_rule; // Either variable or css_rule
+// Lexer
+variable: CAPITAL_IDENT ASSIGNMENT_OPERATOR expression SEMICOLON;
 
-variable: CAPITAL_IDENT ASSIGNMENT_OPERATOR expression SEMICOLON; // VarableName := #ffffff;
+selector: ID_IDENT | CLASS_IDENT | LOWER_IDENT;
 
-css_rule: selector OPEN_BRACE body* CLOSE_BRACE; // background-color: #ff00ff;
+value: COLOR | PIXELSIZE | PERCENTAGE | SCALAR | TRUE | FALSE | CAPITAL_IDENT | LOWER_IDENT;
 
-body: declaration | if_statement; // Either decleration like background-color: #ff00ff; or an If-statement.
+term: value (MUL value)*;
 
-declaration: LOWER_IDENT COLON expression SEMICOLON; // see above.
+expression: term (PLUS term)*;
 
-if_statement // if[Test] { // ... } else { // ... }
-    : IF BOX_BRACKET_OPEN condition BOX_BRACKET_CLOSE
-      OPEN_BRACE body* CLOSE_BRACE
-      else_statement?
-    ;
+bodyItem: declaration | ifClause;
 
-else_statement: ELSE OPEN_BRACE body* CLOSE_BRACE;
+ifClause   : IF BOX_BRACKET_OPEN expression BOX_BRACKET_CLOSE
+             OPEN_BRACE bodyItem* CLOSE_BRACE
+             elseClause? ;
 
-condition: CAPITAL_IDENT | TRUE | FALSE; // function condition
+elseClause : ELSE OPEN_BRACE bodyItem* CLOSE_BRACE ;
 
-selector: LOWER_IDENT | ID_IDENT | CLASS_IDENT; // # .help help
+declaration: LOWER_IDENT COLON expression SEMICOLON;
 
-expression: value (wiskunde value)*; //
+block: selector OPEN_BRACE bodyItem* CLOSE_BRACE;
 
-value: COLOR | PIXELSIZE | PERCENTAGE | SCALAR | TRUE | FALSE | CAPITAL_IDENT;
-
-wiskunde: MIN | PLUS | MUL;
+statement: variable | block;
 
 //--- PARSER: ---
 stylesheet: statement* EOF;
+
+
+//statement : variable | css_rule; // Either variable or css_rule
+//
+//variable: CAPITAL_IDENT ASSIGNMENT_OPERATOR expression SEMICOLON; // VarableName := #ffffff;
+//
+//css_rule: selector OPEN_BRACE body* CLOSE_BRACE; // background-color: #ff00ff;
+//
+//body: declaration | if_statement; // Either decleration like background-color: #ff00ff; or an If-statement.
+//
+//declaration: LOWER_IDENT COLON expression SEMICOLON; // see above.
+//
+//if_statement // if[Test] { // ... } else { // ... }
+//    : IF BOX_BRACKET_OPEN condition BOX_BRACKET_CLOSE
+//      OPEN_BRACE body* CLOSE_BRACE
+//      else_statement?
+//    ;
+//
+//else_statement: ELSE OPEN_BRACE body* CLOSE_BRACE;
+//
+//condition: CAPITAL_IDENT | TRUE | FALSE; // function condition
+//
+//selector: LOWER_IDENT | ID_IDENT | CLASS_IDENT; // # .help help
+//
+//expression: value (additiveExpression value)*; //
+//
+//value: COLOR | PIXELSIZE | PERCENTAGE | SCALAR | TRUE | FALSE | CAPITAL_IDENT | PLUS | MIN | MUL;
+//
+//multiplicative
+//    : expression (MUL expression)*
+//    ;
+//
+//additiveExpression
+//    : multiplicative
+//    | additiveExpression (PLUS) multiplicative*
+//    | additiveExpression (MIN) multiplicative*
+//    ;
+//
+////--- PARSER: ---
+//stylesheet: statement* EOF;
 

@@ -11,47 +11,11 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface ICSSVisitor<T> extends ParseTreeVisitor<T> {
 	/**
-	 * Visit a parse tree produced by {@link ICSSParser#statement}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitStatement(ICSSParser.StatementContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link ICSSParser#variable}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitVariable(ICSSParser.VariableContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link ICSSParser#css_rule}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCss_rule(ICSSParser.Css_ruleContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link ICSSParser#body}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBody(ICSSParser.BodyContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link ICSSParser#declaration}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitDeclaration(ICSSParser.DeclarationContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link ICSSParser#if_statement}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIf_statement(ICSSParser.If_statementContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link ICSSParser#condition}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitCondition(ICSSParser.ConditionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ICSSParser#selector}.
 	 * @param ctx the parse tree
@@ -59,23 +23,59 @@ public interface ICSSVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSelector(ICSSParser.SelectorContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ICSSParser#expression}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitExpression(ICSSParser.ExpressionContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link ICSSParser#value}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitValue(ICSSParser.ValueContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ICSSParser#wiskunde}.
+	 * Visit a parse tree produced by {@link ICSSParser#term}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitWiskunde(ICSSParser.WiskundeContext ctx);
+	T visitTerm(ICSSParser.TermContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ICSSParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExpression(ICSSParser.ExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ICSSParser#bodyItem}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBodyItem(ICSSParser.BodyItemContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ICSSParser#ifClause}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIfClause(ICSSParser.IfClauseContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ICSSParser#elseClause}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitElseClause(ICSSParser.ElseClauseContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ICSSParser#declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDeclaration(ICSSParser.DeclarationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ICSSParser#block}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlock(ICSSParser.BlockContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ICSSParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStatement(ICSSParser.StatementContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ICSSParser#stylesheet}.
 	 * @param ctx the parse tree
