@@ -3,6 +3,7 @@ package nl.han.ica.icss.parser;
 import java.util.Stack;
 
 
+import nl.han.ica.datastructures.HANStack;
 import nl.han.ica.datastructures.IHANStack;
 import nl.han.ica.icss.ast.*;
 import nl.han.ica.icss.ast.literals.*;
@@ -26,21 +27,68 @@ public class ASTListener extends ICSSBaseListener {
 
 	public ASTListener() {
 		ast = new AST();
-		//currentContainer = new HANStack<>();
+		currentContainer = new HANStack<>();
+		currentContainer.push(ast.root);
 	}
     public AST getAST() {
-        return ast;
+        return this.ast;
     }
 
 	@Override
 	public void enterStylesheet(ICSSParser.StylesheetContext ctx) {
-		for (ICSSParser.StatementContext statement : ctx.statement()) {
-			System.out.println(statement.getText());
-		}
+		currentContainer.push(ast.root);
 	}
 
 	@Override
 	public void exitStylesheet(ICSSParser.StylesheetContext ctx) {
-		System.out.println("Exiting stylesheet");
+		currentContainer.pop();
+	}
+	@Override
+	public void enterBlock (ICSSParser.BlockContext blockContext) {
+		Stylerule node = new Stylerule();
+		currentContainer.peek().addChild(node);
+		currentContainer.push(node);
+	}
+
+	@Override
+	public void exitBlock (ICSSParser.BlockContext ctx) {
+		currentContainer.pop();
+	}
+
+	@Override
+	public void enterSelector(ICSSParser.SelectorContext ctx) {
+		Selector node = createSelector(ctx);
+		currentContainer.peek().addChild(node);
+		currentContainer.push(node);
+	}
+
+	@Override
+	public void exitSelector(ICSSParser.SelectorContext ctx) {
+		currentContainer.pop();
+	}
+
+	@Override
+	public void enterBodyItem(ICSSParser.BodyItemContext ctx) {
+		Declaration node = new Declaration(ctx.declaration().getText());
+		currentContainer.peek().addChild(node);
+		currentContainer.push(node);
+	}
+
+	@Override
+	public void exitBodyItem(ICSSParser.BodyItemContext ctx) {
+		currentContainer.pop();
+	}
+
+	private Selector createSelector(ICSSParser.SelectorContext ctx) {
+		switch(ctx.getStart().getType()) {
+			case ICSSParser.ID_IDENT:
+				return new IdSelector(ctx.ID_IDENT().getText());
+			case ICSSParser.CLASS_IDENT:
+				return new ClassSelector(ctx.CLASS_IDENT().getText());
+			case ICSSParser.LOWER_IDENT:
+				return  new TagSelector(ctx.LOWER_IDENT().getText());
+			default:
+				throw new IllegalStateException("Unexpected token type: " + ctx.getStart().getType());
+		}
 	}
 }
