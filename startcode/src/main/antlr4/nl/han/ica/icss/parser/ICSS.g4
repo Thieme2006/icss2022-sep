@@ -53,11 +53,11 @@ value: COLOR | PIXELSIZE | PERCENTAGE | SCALAR | TRUE | FALSE | CAPITAL_IDENT | 
 
 term: value (MUL value)*;
 
-expression: term (PLUS term)*;
+expression: term ((PLUS | MIN) term)*;
 
-bodyItem: declaration | ifClause;
+bodyItem: declaration | ifClause | variable;
 
-ifClause   : IF BOX_BRACKET_OPEN expression BOX_BRACKET_CLOSE
+ifClause   : IF BOX_BRACKET_OPEN value BOX_BRACKET_CLOSE
              OPEN_BRACE bodyItem* CLOSE_BRACE
              elseClause? ;
 
