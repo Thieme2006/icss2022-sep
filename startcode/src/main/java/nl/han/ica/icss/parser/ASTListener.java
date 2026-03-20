@@ -148,11 +148,13 @@ public class ASTListener extends ICSSBaseListener {
 					op.lhs = result;
 					op.rhs = right;
 					result = op;
+					break;
 				case "-":
 					SubtractOperation op1 = new SubtractOperation();
 					op1.lhs = result;
 					op1.rhs = right;
 					result = op1;
+					break;
 			}
 		}
 		return result;
