@@ -24,15 +24,21 @@ public class Checker extends BaseChecker {
 
         validateNode(node);
 
+        boolean hasExitedCurrentScope = false;
         for(ASTNode childNode : node.getChildren()) {
             if(node instanceof VariableAssignment && childNode instanceof VariableReference) {
                 continue;
             }
 
+            if(childNode instanceof ElseClause) {
+                variableTypes.removeFirst();
+                hasExitedCurrentScope = true;
+            }
+
             walkThroughASTTree(childNode);
         }
 
-        if(node instanceof Scoped) {
+        if(node instanceof Scoped && !hasExitedCurrentScope) {
             variableTypes.removeFirst();
         }
     }
