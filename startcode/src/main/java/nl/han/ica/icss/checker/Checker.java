@@ -18,7 +18,7 @@ public class Checker extends BaseChecker {
 
     private void walkThroughASTTree(ASTNode node) {
 
-        if(node instanceof IfClause) {
+        if(node instanceof Scoped) {
             variableTypes.addFirst(new HashMap<>());
         }
 
@@ -32,7 +32,7 @@ public class Checker extends BaseChecker {
             walkThroughASTTree(childNode);
         }
 
-        if(node instanceof IfClause) {
+        if(node instanceof Scoped) {
             variableTypes.removeFirst();
         }
     }

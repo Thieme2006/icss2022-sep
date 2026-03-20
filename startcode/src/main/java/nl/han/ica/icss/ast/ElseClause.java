@@ -3,7 +3,7 @@ package nl.han.ica.icss.ast;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class ElseClause extends ASTNode{
+public class ElseClause extends ASTNode implements Scoped {
 
     public ArrayList<ASTNode> body = new ArrayList<>();
 

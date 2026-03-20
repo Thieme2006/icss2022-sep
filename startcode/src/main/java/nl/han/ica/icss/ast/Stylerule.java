@@ -3,7 +3,7 @@ package nl.han.ica.icss.ast;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class Stylerule extends ASTNode {
+public class Stylerule extends ASTNode implements Scoped {
 	
 	public ArrayList<Selector> selectors = new ArrayList<>();
 	public ArrayList<ASTNode> body = new ArrayList<>();
