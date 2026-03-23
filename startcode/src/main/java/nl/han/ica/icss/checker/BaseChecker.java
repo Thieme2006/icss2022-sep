@@ -80,6 +80,7 @@ public abstract class BaseChecker {
                             colorDeclaration.property.name,
                             ExpressionType.COLOR,
                             type));
+            return;
         }
     }
 
@@ -87,7 +88,8 @@ public abstract class BaseChecker {
         ExpressionType left = getExpressionType(operation.lhs);
         ExpressionType right = getExpressionType(operation.rhs);
 
-        if (left == null || right == null) {
+        if ((left == null || right == null) ||
+           (left == ExpressionType.UNDEFINED || right == ExpressionType.UNDEFINED)) {
             operation.setError(ErrorMessages.undefinedVariableInOperation());
             return ExpressionType.UNDEFINED;
         }

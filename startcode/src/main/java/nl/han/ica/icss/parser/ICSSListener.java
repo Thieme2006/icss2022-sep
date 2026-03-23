@@ -127,4 +127,34 @@ public interface ICSSListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitStylesheet(ICSSParser.StylesheetContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ICSSParser#switch}.
+	 * @param ctx the parse tree
+	 */
+	void enterSwitch(ICSSParser.SwitchContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ICSSParser#switch}.
+	 * @param ctx the parse tree
+	 */
+	void exitSwitch(ICSSParser.SwitchContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ICSSParser#caseBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterCaseBlock(ICSSParser.CaseBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ICSSParser#caseBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitCaseBlock(ICSSParser.CaseBlockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link ICSSParser#defaultCaseBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterDefaultCaseBlock(ICSSParser.DefaultCaseBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link ICSSParser#defaultCaseBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitDefaultCaseBlock(ICSSParser.DefaultCaseBlockContext ctx);
 }

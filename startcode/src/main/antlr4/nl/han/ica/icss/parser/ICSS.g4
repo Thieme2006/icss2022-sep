@@ -5,6 +5,9 @@ grammar ICSS;
 // IF support:
 IF: 'if';
 ELSE: 'else';
+SWITCH: 'switch';
+CASE: 'case';
+SWITCH_DEFAULT: 'default';
 BOX_BRACKET_OPEN: '[';
 BOX_BRACKET_CLOSE: ']';
 
@@ -55,7 +58,7 @@ term: value (MUL value)*;
 
 expression: term ((PLUS | MIN) term)*;
 
-bodyItem: declaration | ifClause | variable;
+bodyItem: declaration | ifClause | variable | switchCaseBlock;
 
 ifClause   : IF BOX_BRACKET_OPEN value BOX_BRACKET_CLOSE
              OPEN_BRACE bodyItem* CLOSE_BRACE
@@ -72,43 +75,11 @@ statement: variable | block;
 //--- PARSER: ---
 stylesheet: statement* EOF;
 
+switchCaseBlock: SWITCH BOX_BRACKET_OPEN expression BOX_BRACKET_CLOSE
+        OPEN_BRACE caseBlock* defaultBlock? CLOSE_BRACE ;
 
-//statement : variable | css_rule; // Either variable or css_rule
-//
-//variable: CAPITAL_IDENT ASSIGNMENT_OPERATOR expression SEMICOLON; // VarableName := #ffffff;
-//
-//css_rule: selector OPEN_BRACE body* CLOSE_BRACE; // background-color: #ff00ff;
-//
-//body: declaration | if_statement; // Either decleration like background-color: #ff00ff; or an If-statement.
-//
-//declaration: LOWER_IDENT COLON expression SEMICOLON; // see above.
-//
-//if_statement // if[Test] { // ... } else { // ... }
-//    : IF BOX_BRACKET_OPEN condition BOX_BRACKET_CLOSE
-//      OPEN_BRACE body* CLOSE_BRACE
-//      else_statement?
-//    ;
-//
-//else_statement: ELSE OPEN_BRACE body* CLOSE_BRACE;
-//
-//condition: CAPITAL_IDENT | TRUE | FALSE; // function condition
-//
-//selector: LOWER_IDENT | ID_IDENT | CLASS_IDENT; // # .help help
-//
-//expression: value (additiveExpression value)*; //
-//
-//value: COLOR | PIXELSIZE | PERCENTAGE | SCALAR | TRUE | FALSE | CAPITAL_IDENT | PLUS | MIN | MUL;
-//
-//multiplicative
-//    : expression (MUL expression)*
-//    ;
-//
-//additiveExpression
-//    : multiplicative
-//    | additiveExpression (PLUS) multiplicative*
-//    | additiveExpression (MIN) multiplicative*
-//    ;
-//
-////--- PARSER: ---
-//stylesheet: statement* EOF;
+caseBlock: CASE expression COLON OPEN_BRACE bodyItem* CLOSE_BRACE;
 
+defaultBlock: SWITCH_DEFAULT COLON OPEN_BRACE bodyItem* CLOSE_BRACE;
+
+// TODO: mogelijk leuk om een switch case toe te voegen als parsing voor eigen implementatie :)

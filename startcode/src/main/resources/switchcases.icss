@@ -15,11 +15,11 @@
 
     switch [50%] {
       case 25%: {
-        opacity: 0.25;
+        opacity: 1;
       }
 
       case 50%: {
-        opacity: 0.5;
+        opacity: 2;
       }
 
       case 100%: {
@@ -27,7 +27,7 @@
       }
 
       default: {
-        opacity: 0.75;
+        opacity: 0;
       }
     }
 

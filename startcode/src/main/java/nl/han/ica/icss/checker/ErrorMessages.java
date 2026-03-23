@@ -19,7 +19,7 @@ public final class ErrorMessages {
     }
 
     public static String wrongPropertyType(String property, ExpressionType expected, ExpressionType actual) {
-        return "\"" + property + "\" expects \"" + expected + "\" but got \"" + actual + "\".";
+        return "Property \"" + property + "\" expects \"" + expected + "\" but got \"" + actual + "\".";
     }
 
     public static String mixedTypes(ExpressionType left, ExpressionType right) {

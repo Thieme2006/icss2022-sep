@@ -82,4 +82,22 @@ public interface ICSSVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitStylesheet(ICSSParser.StylesheetContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ICSSParser#switch}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSwitch(ICSSParser.SwitchContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ICSSParser#caseBlock}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitCaseBlock(ICSSParser.CaseBlockContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ICSSParser#defaultCaseBlock}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitDefaultCaseBlock(ICSSParser.DefaultCaseBlockContext ctx);
 }
