@@ -110,8 +110,9 @@ public abstract class BaseChecker {
         }
 
         return switch(operation) {
-            case MultiplyOperation _ -> validateMultiplyOperation(operation, left, right);
-            case AddOperation _, SubtractOperation _ -> validateAddOrSubtractOperation(operation, left, right);
+            case MultiplyOperation ignore1 -> validateMultiplyOperation(operation, left, right);
+            case AddOperation ignore2 -> validateAddOrSubtractOperation(operation, left, right);
+            case SubtractOperation ignore3 -> validateAddOrSubtractOperation(operation, left, right);
             default -> ExpressionType.UNDEFINED;
         };
     }
@@ -149,6 +150,10 @@ public abstract class BaseChecker {
     protected void validateExpression(Expression expression, String propertyName) {
         ExpressionType expressionType = getExpressionType(expression);
 
+        if(expressionType == ExpressionType.UNDEFINED) {
+            return;
+        }
+
         if(expressionType != ExpressionType.PERCENTAGE && expressionType != ExpressionType.PIXEL) {
             expression.setError(ErrorMessages.invalidSizeType(propertyName, expressionType));
         }
@@ -166,7 +171,7 @@ public abstract class BaseChecker {
 
     protected ExpressionType getExpressionType(Expression expression) {
         return switch (expression) {
-            case BoolLiteral _ -> ExpressionType.BOOL;
+            case BoolLiteral ignore1 -> ExpressionType.BOOL;
             case Literal l -> l.getType();
             case VariableReference vr -> getVariableTypeFromVariableReference(vr);
             case Operation o -> validateOperationType(o);

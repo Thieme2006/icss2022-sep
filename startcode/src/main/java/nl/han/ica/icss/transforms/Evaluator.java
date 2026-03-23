@@ -101,7 +101,7 @@ public class Evaluator implements Transform {
     private void assignVariable(String name, Literal value) {
         for(int i = 0; i < variableValues.getSize(); i++) {
             HashMap<String, Literal> scope = variableValues.get(i);
-            scope.computeIfPresent(name, (_, _) -> value); // SonarQube kwam hier met een voorstel en was wel benieuwd of dit ging werken :)
+            scope.computeIfPresent(name, (ignore1, ignore2) -> value); // SonarQube kwam hier met een voorstel en was wel benieuwd of dit ging werken :)
                                                            // Bevorderd debugging niet echt maar het maakt de code wat compacter
         }
 
