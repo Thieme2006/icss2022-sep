@@ -5,6 +5,7 @@ import nl.han.ica.icss.ast.*;
 import nl.han.ica.icss.ast.literals.BoolLiteral;
 import nl.han.ica.icss.ast.operations.AddOperation;
 import nl.han.ica.icss.ast.operations.MultiplyOperation;
+import nl.han.ica.icss.ast.operations.SubtractOperation;
 import nl.han.ica.icss.ast.types.ExpressionType;
 
 import java.util.HashMap;
@@ -39,20 +40,18 @@ public abstract class BaseChecker {
     // =================================================================================================================
 
     protected void handleValidation(VariableAssignment variableAssignment) {
-        ExpressionType type = null;
+        ExpressionType type = getExpressionType(variableAssignment.expression);
 
-        switch (variableAssignment.expression) {
-            case Literal l -> type = l.getType();
-            case VariableReference vr -> type = getVariableTypeFromName(vr.name);
-            default -> {}
-        }
-
-        if (type == null || type == ExpressionType.UNDEFINED) {
+        if (type == null) {
             variableAssignment.setError(ErrorMessages.variableNotDefined(variableAssignment.name.name));
             return;
         }
+        // UndefinedVariables die gereturned worden hebben altijd al een variabele.
+        if(type == ExpressionType.UNDEFINED) {
+            return;
+        }
 
-        variableTypes.get(0).put(variableAssignment.name.name, type);
+        variableTypes.getFirst().put(variableAssignment.name.name, type);
     }
 
     protected void handleValidation(VariableReference variableReference) {
@@ -64,17 +63,23 @@ public abstract class BaseChecker {
     // =================================================================================================================
 
     protected boolean addErrorIfVariableNotDefined(ASTNode node, String variableName) {
-        if (getVariableTypeFromName(variableName) == null) {
+        ExpressionType type = getVariableTypeFromName(variableName);
+        if (type == null) {
             node.setError(ErrorMessages.variableNotDefined(variableName));
+            return false;
         }
-        return getVariableTypeFromName(variableName) != null;
+        return true;
     }
 
     public void validateColorProperty(Declaration colorDeclaration) {
         ExpressionType type = getExpressionType(colorDeclaration.expression);
 
         if(type != ExpressionType.COLOR) {
-            colorDeclaration.setError(ErrorMessages.wrongPropertyType(colorDeclaration.property.name, ExpressionType.COLOR, type));
+            colorDeclaration.setError(
+                    ErrorMessages.wrongPropertyType(
+                            colorDeclaration.property.name,
+                            ExpressionType.COLOR,
+                            type));
         }
     }
 
@@ -82,25 +87,37 @@ public abstract class BaseChecker {
         ExpressionType left = getExpressionType(operation.lhs);
         ExpressionType right = getExpressionType(operation.rhs);
 
-        if(left == null || right == null) {
+        if (left == null || right == null) {
             operation.setError(ErrorMessages.undefinedVariableInOperation());
+            return ExpressionType.UNDEFINED;
         }
 
         if(left != right && !isScalar(left) && !isScalar(right)) {
             operation.setError(ErrorMessages.mixedTypes(left, right));
+            return ExpressionType.UNDEFINED;
         }
 
-        switch(operation) {
-            case MultiplyOperation _ -> {return validateMultiplyOperation(operation, left, right);}
-            case AddOperation _ -> {return validateAddOperation(operation, left, right);}
-            default -> {return ExpressionType.UNDEFINED;}
+        if(!isCompatible(left, right)) {
+            operation.setError(ErrorMessages.mixedTypes(left, right));
+            return ExpressionType.UNDEFINED;
         }
+
+        if(left == ExpressionType.COLOR || right == ExpressionType.COLOR) {
+            operation.setError("A color is not allowed to be used in an operation.");
+            return ExpressionType.UNDEFINED;
+        }
+
+        return switch(operation) {
+            case MultiplyOperation _ -> validateMultiplyOperation(operation, left, right);
+            case AddOperation _, SubtractOperation _ -> validateAddOrSubtractOperation(operation, left, right);
+            default -> ExpressionType.UNDEFINED;
+        };
     }
 
     protected ExpressionType validateMultiplyOperation(Operation operation, ExpressionType left, ExpressionType right) {
         if(!isScalar(left) && !isScalar(right)) {
             operation.setError(ErrorMessages.invalidMultiplyOperation());
-            return left;
+            return ExpressionType.UNDEFINED;
         }
 
         if(isScalar(left)) {
@@ -110,12 +127,17 @@ public abstract class BaseChecker {
         }
     }
 
-    protected ExpressionType validateAddOperation(Operation operation, ExpressionType left, ExpressionType right) {
-        if(isScalar(left) || isScalar(right)) {
-            operation.setError(ErrorMessages.invalidAddOperation());
-            return left;
+    protected ExpressionType validateAddOrSubtractOperation(Operation operation, ExpressionType left, ExpressionType right) {
+        if(isScalar(left) && isScalar(right)) {
+            operation.setError(ErrorMessages.usingOnlyScalarValuesInAddOrSubtractNotPermitted());
+            return ExpressionType.UNDEFINED;
         }
-        return right;
+
+        if(isScalar(left) || isScalar(right)) {
+            operation.setError(ErrorMessages.invalidAddOrSubtractOperation());
+            return ExpressionType.UNDEFINED;
+        }
+        return isScalar(left) ? right : left;
     }
 
     protected void validateSizeDeclaration(Declaration declaration) {
@@ -141,29 +163,41 @@ public abstract class BaseChecker {
     // =================================================================================================================
 
     protected ExpressionType getExpressionType(Expression expression) {
-        switch (expression) {
-            case BoolLiteral _ -> { return ExpressionType.BOOL; }
-            case Literal l -> {return l.getType();}
-            case VariableReference vr -> {return getVariableTypeFromName(vr.name);}
-            case Operation o -> { return validateOperationType(o);}
-            default -> {
-                return ExpressionType.UNDEFINED;
-            }
+        return switch (expression) {
+            case BoolLiteral _ -> ExpressionType.BOOL;
+            case Literal l -> l.getType();
+            case VariableReference vr -> getVariableTypeFromVariableReference(vr);
+            case Operation o -> validateOperationType(o);
+            default -> ExpressionType.UNDEFINED;
+        };
+    }
+
+    private ExpressionType getVariableTypeFromVariableReference(VariableReference vr) {
+        ExpressionType type = getVariableTypeFromName(vr.name);
+        if(type == null) {
+            vr.setError(ErrorMessages.variableNotDefined(vr.name));
+            return ExpressionType.UNDEFINED;
         }
+        return type;
     }
 
     protected static boolean isScalar(ExpressionType expressionType) {
         return expressionType == ExpressionType.SCALAR;
     }
 
+    protected static boolean isCompatible(ExpressionType left, ExpressionType right) {
+        if(left == right) return true;
+        return isScalar(left) || isScalar(right);
+    }
+
     protected ExpressionType getVariableTypeFromName(String variableName) {
-        for (HashMap<String, ExpressionType> scopeVariableMap : variableTypes) {
+        for (int i = variableTypes.getSize() - 1; i >= 0; i--) {
+            HashMap<String, ExpressionType> scopeVariableMap = variableTypes.get(i);
             ExpressionType result = scopeVariableMap.get(variableName);
             if (result != null) {
                 return result;
             }
         }
-
         return null;
     }
 }
