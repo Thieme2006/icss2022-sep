@@ -1,0 +1,61 @@
+.p {
+    switch [10px] {
+      case 10px: {
+        width: 100px;
+      }
+
+      case 20px: {
+        width: 200px;
+      }
+
+      default: {
+        width: 50px;
+      }
+    }
+
+    switch [50%] {
+      case 25%: {
+        opacity: 0.25;
+      }
+
+      case 50%: {
+        opacity: 0.5;
+      }
+
+      case 100%: {
+        opacity: 1;
+      }
+
+      default: {
+        opacity: 0.75;
+      }
+    }
+
+    switch [#123456] {
+      case #123456: {
+        background: #123456;
+      }
+
+      case #abcdef: {
+        background: #abcdef;
+      }
+
+      default: {
+        background: #000000;
+      }
+    }
+
+    switch [TRUE] {
+      case TRUE: {
+        display: block;
+      }
+
+      case FALSE: {
+        display: none;
+      }
+
+      default: {
+        display: none;
+      }
+    }
+}
