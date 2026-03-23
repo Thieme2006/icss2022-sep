@@ -128,15 +128,15 @@ public interface ICSSListener extends ParseTreeListener {
 	 */
 	void exitStylesheet(ICSSParser.StylesheetContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ICSSParser#switch}.
+	 * Enter a parse tree produced by {@link ICSSParser#switchCaseBlock}.
 	 * @param ctx the parse tree
 	 */
-	void enterSwitch(ICSSParser.SwitchContext ctx);
+	void enterSwitchCaseBlock(ICSSParser.SwitchCaseBlockContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ICSSParser#switch}.
+	 * Exit a parse tree produced by {@link ICSSParser#switchCaseBlock}.
 	 * @param ctx the parse tree
 	 */
-	void exitSwitch(ICSSParser.SwitchContext ctx);
+	void exitSwitchCaseBlock(ICSSParser.SwitchCaseBlockContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ICSSParser#caseBlock}.
 	 * @param ctx the parse tree
@@ -148,13 +148,13 @@ public interface ICSSListener extends ParseTreeListener {
 	 */
 	void exitCaseBlock(ICSSParser.CaseBlockContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link ICSSParser#defaultCaseBlock}.
+	 * Enter a parse tree produced by {@link ICSSParser#defaultBlock}.
 	 * @param ctx the parse tree
 	 */
-	void enterDefaultCaseBlock(ICSSParser.DefaultCaseBlockContext ctx);
+	void enterDefaultBlock(ICSSParser.DefaultBlockContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link ICSSParser#defaultCaseBlock}.
+	 * Exit a parse tree produced by {@link ICSSParser#defaultBlock}.
 	 * @param ctx the parse tree
 	 */
-	void exitDefaultCaseBlock(ICSSParser.DefaultCaseBlockContext ctx);
+	void exitDefaultBlock(ICSSParser.DefaultBlockContext ctx);
 }

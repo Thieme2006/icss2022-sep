@@ -102,7 +102,7 @@ public class ICSSBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements I
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitSwitch(ICSSParser.SwitchContext ctx) { return visitChildren(ctx); }
+	@Override public T visitSwitchCaseBlock(ICSSParser.SwitchCaseBlockContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -116,5 +116,5 @@ public class ICSSBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements I
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitDefaultCaseBlock(ICSSParser.DefaultCaseBlockContext ctx) { return visitChildren(ctx); }
+	@Override public T visitDefaultBlock(ICSSParser.DefaultBlockContext ctx) { return visitChildren(ctx); }
 }

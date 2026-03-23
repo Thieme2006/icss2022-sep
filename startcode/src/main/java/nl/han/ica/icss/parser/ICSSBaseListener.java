@@ -161,13 +161,13 @@ public class ICSSBaseListener implements ICSSListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterSwitch(ICSSParser.SwitchContext ctx) { }
+	@Override public void enterSwitchCaseBlock(ICSSParser.SwitchCaseBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitSwitch(ICSSParser.SwitchContext ctx) { }
+	@Override public void exitSwitchCaseBlock(ICSSParser.SwitchCaseBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -185,13 +185,13 @@ public class ICSSBaseListener implements ICSSListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterDefaultCaseBlock(ICSSParser.DefaultCaseBlockContext ctx) { }
+	@Override public void enterDefaultBlock(ICSSParser.DefaultBlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitDefaultCaseBlock(ICSSParser.DefaultCaseBlockContext ctx) { }
+	@Override public void exitDefaultBlock(ICSSParser.DefaultBlockContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

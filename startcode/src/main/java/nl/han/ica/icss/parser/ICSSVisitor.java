@@ -83,11 +83,11 @@ public interface ICSSVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitStylesheet(ICSSParser.StylesheetContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ICSSParser#switch}.
+	 * Visit a parse tree produced by {@link ICSSParser#switchCaseBlock}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitSwitch(ICSSParser.SwitchContext ctx);
+	T visitSwitchCaseBlock(ICSSParser.SwitchCaseBlockContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ICSSParser#caseBlock}.
 	 * @param ctx the parse tree
@@ -95,9 +95,9 @@ public interface ICSSVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCaseBlock(ICSSParser.CaseBlockContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ICSSParser#defaultCaseBlock}.
+	 * Visit a parse tree produced by {@link ICSSParser#defaultBlock}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitDefaultCaseBlock(ICSSParser.DefaultCaseBlockContext ctx);
+	T visitDefaultBlock(ICSSParser.DefaultBlockContext ctx);
 }
