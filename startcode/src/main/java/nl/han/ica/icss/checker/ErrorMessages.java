@@ -30,8 +30,12 @@ public final class ErrorMessages {
         return "Using an undefined variable in an operation is not allowed.";
     }
 
-    public static String invalidAddOperation() {
-        return "Using a scalar value in an add operation is not permitted.";
+    public static String usingOnlyScalarValuesInAddOrSubtractNotPermitted() {
+        return "Using only scalar values in an add or subtract operation is not permitted.";
+    }
+
+    public static String invalidAddOrSubtractOperation() {
+        return "Using a scalar value in an add or substract operation is not permitted.";
     }
 
     public static String invalidMultiplyOperation() {

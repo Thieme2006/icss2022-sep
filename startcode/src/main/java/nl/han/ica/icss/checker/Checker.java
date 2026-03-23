@@ -17,28 +17,19 @@ public class Checker extends BaseChecker {
     }
 
     private void walkThroughASTTree(ASTNode node) {
-
-        if(node instanceof Scoped) {
+        // ALs de node een IF, ELSE of STYLERULE is dan moet hij een nieuwe scope toevoegen.
+        if (node instanceof Scoped) {
             variableTypes.addFirst(new HashMap<>());
         }
 
         validateNode(node);
 
-        boolean hasExitedCurrentScope = false;
-        for(ASTNode childNode : node.getChildren()) {
-            if(node instanceof VariableAssignment && childNode instanceof VariableReference) {
-                continue;
-            }
-
-            if(childNode instanceof ElseClause) {
-                variableTypes.removeFirst();
-                hasExitedCurrentScope = true;
-            }
-
-            walkThroughASTTree(childNode);
+        for (ASTNode child : node.getChildren()) {
+            walkThroughASTTree(child);
         }
 
-        if(node instanceof Scoped && !hasExitedCurrentScope) {
+        // ALs de node een IF, ELSE of STYLERULE is dan moet hij de laatste scope verwijderen.
+        if (node instanceof Scoped) {
             variableTypes.removeFirst();
         }
     }
