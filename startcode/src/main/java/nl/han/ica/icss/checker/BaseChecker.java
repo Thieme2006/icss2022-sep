@@ -21,6 +21,17 @@ public abstract class BaseChecker {
             "height", ExpressionTypes.SIZE
     ));
 
+    protected void validateNode(ASTNode node) {
+        switch (node) {
+            case VariableAssignment va -> handleValidation(va);
+            case VariableReference vr -> handleValidation(vr);
+            case Declaration d -> check(d);
+            case IfClause ifClause -> validateIfClause(ifClause);
+            case Switch s -> handleSwitchCase(s);
+            default -> {}
+        }
+    }
+
     protected void check(Declaration declaration) {
         ExpressionTypes expressionGroup = validProperties.get(declaration.property.name);
 
@@ -56,6 +67,28 @@ public abstract class BaseChecker {
 
     protected void handleValidation(VariableReference variableReference) {
         addErrorIfVariableNotDefined(variableReference, variableReference.name);
+    }
+
+    protected void handleSwitchCase(Switch switchCase) {
+        for(Case caseItem : switchCase.cases) {
+            validateSwitchCase(caseItem, switchCase.condition);
+        }
+    }
+
+    private void validateSwitchCase(Case caseNode, Expression condition) {
+        if(caseNode.condition instanceof Expression expression) {
+            ExpressionType type = getExpressionType(expression);
+
+            ExpressionType switchConditionType = getExpressionType(condition);
+            if(!(switchConditionType == type)) {
+                caseNode.setError("Case \"" + type + "\" does not match the type of the switch condition \"" + switchConditionType + "\".");
+            }
+        }
+        validateNode(caseNode.condition);
+
+        for(ASTNode child : caseNode.body) {
+            validateNode(child);
+        }
     }
 
     // =================================================================================================================

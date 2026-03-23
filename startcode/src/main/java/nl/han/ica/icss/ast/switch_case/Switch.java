@@ -1,24 +1,25 @@
 package nl.han.ica.icss.ast.switch_case;
 
 import nl.han.ica.icss.ast.ASTNode;
+import nl.han.ica.icss.ast.Expression;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class Switch extends ASTNode {
 
-    public ASTNode condition;
+    public Expression condition;
     public ArrayList<Case> cases = new ArrayList<>();
     public DefaultCase defaultCase; // Kan null zijn.
 
     public Switch() { }
 
-    public Switch(ASTNode condition, ArrayList<Case> cases) {
+    public Switch(Expression condition, ArrayList<Case> cases) {
         this.condition = condition;
         this.cases = cases;
     }
 
-    public Switch(ASTNode condition, ArrayList<Case> cases, DefaultCase defaultCase) {
+    public Switch(Expression condition, ArrayList<Case> cases, DefaultCase defaultCase) {
         this.condition = condition;
         this.cases = cases;
         this.defaultCase = defaultCase;

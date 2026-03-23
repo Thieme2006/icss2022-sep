@@ -2,6 +2,8 @@ package nl.han.ica.icss.checker;
 
 import nl.han.ica.datastructures.HANLinkedList;
 import nl.han.ica.icss.ast.*;
+import nl.han.ica.icss.ast.switch_case.Switch;
+
 import java.util.HashMap;
 
 public class Checker extends BaseChecker {
@@ -31,16 +33,6 @@ public class Checker extends BaseChecker {
         // ALs de node een IF, ELSE of STYLERULE is dan moet hij de laatste scope verwijderen.
         if (node instanceof Scoped) {
             variableTypes.removeFirst();
-        }
-    }
-
-    private void validateNode(ASTNode node) {
-        switch (node) {
-            case VariableAssignment va -> handleValidation(va);
-            case VariableReference vr -> handleValidation(vr);
-            case Declaration d -> check(d);
-            case IfClause ifClause -> validateIfClause(ifClause);
-            default -> {}
         }
     }
 }
