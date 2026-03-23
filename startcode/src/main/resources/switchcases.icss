@@ -15,47 +15,47 @@
 
     switch [50%] {
       case 25%: {
-        opacity: 1;
+        height: 25%;
       }
 
       case 50%: {
-        opacity: 2;
+        height: 50%;
       }
 
       case 100%: {
-        opacity: 1;
+        height: 100%;
       }
 
       default: {
-        opacity: 0;
+        height: 10%;
       }
     }
 
     switch [#123456] {
       case #123456: {
-        background: #123456;
+        background-color: #123456;
       }
 
       case #abcdef: {
-        background: #abcdef;
+        background-color: #abcdef;
       }
 
       default: {
-        background: #000000;
+        background-color: #000000;
       }
     }
 
     switch [TRUE] {
       case TRUE: {
-        display: block;
+        color: #ff00ff;
       }
 
       case FALSE: {
-        display: none;
+        color: #00ff00;
       }
 
       default: {
-        display: none;
+        color: #0f0f0f;
       }
     }
 }

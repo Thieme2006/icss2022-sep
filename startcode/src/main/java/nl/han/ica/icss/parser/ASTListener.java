@@ -10,6 +10,11 @@ import nl.han.ica.icss.ast.operations.SubtractOperation;
 import nl.han.ica.icss.ast.selectors.ClassSelector;
 import nl.han.ica.icss.ast.selectors.IdSelector;
 import nl.han.ica.icss.ast.selectors.TagSelector;
+import nl.han.ica.icss.ast.switch_case.Case;
+import nl.han.ica.icss.ast.switch_case.DefaultCase;
+import nl.han.ica.icss.ast.switch_case.Switch;
+
+import java.util.ArrayList;
 
 /**
  * This class extracts the ICSS Abstract Syntax Tree from the Antlr Parse tree.
@@ -90,7 +95,16 @@ public class ASTListener extends ICSSBaseListener {
 		Declaration node = new Declaration(ctx.LOWER_IDENT().getText());
 
 		node.expression = createExpression(ctx.expression());
-		currentContainer.peek().addChild(node);
+		handleAddingChild(node);
+	}
+
+	private void handleAddingChild(Declaration declaration) {
+		ASTNode possibleParent = currentContainer.peek();
+		switch(possibleParent) {
+			case Case c -> c.body.add(declaration);
+			case DefaultCase defaultCase -> defaultCase.body.add(declaration);
+			default -> possibleParent.addChild(declaration);
+		}
 	}
 
 	@Override
@@ -120,6 +134,57 @@ public class ASTListener extends ICSSBaseListener {
 
 	@Override
 	public void exitElseClause(ICSSParser.ElseClauseContext ctx) {
+		currentContainer.pop();
+	}
+
+	@Override
+	public void enterSwitchCaseBlock(ICSSParser.SwitchCaseBlockContext ctx) {
+		Switch node = new Switch();
+		node.condition = createExpression(ctx.expression());
+
+		currentContainer.peek().addChild(node);
+		currentContainer.push(node);
+	}
+
+	@Override
+	public void exitSwitchCaseBlock(ICSSParser.SwitchCaseBlockContext ctx) {
+		currentContainer.pop();
+	}
+
+	@Override
+	public void enterCaseBlock(ICSSParser.CaseBlockContext ctx) {
+		Case node = new Case();
+
+		node.condition = createExpression(ctx.expression());
+		currentContainer.peek().addChild(node);
+
+		if(currentContainer.peek() instanceof Switch parent) {
+			parent.cases.add(node);
+		}
+
+		currentContainer.push(node);
+	}
+
+	@Override
+	public void exitCaseBlock(ICSSParser.CaseBlockContext ctx) {
+		currentContainer.pop();
+	}
+
+	@Override
+	public void enterDefaultBlock(ICSSParser.DefaultBlockContext ctx) {
+		DefaultCase node = new DefaultCase();
+
+		currentContainer.peek().addChild(node);
+
+		if(currentContainer.peek() instanceof Switch parent) {
+			parent.defaultCase = node;
+		}
+
+		currentContainer.push(node);
+	}
+
+	@Override
+	public void exitDefaultBlock(ICSSParser.DefaultBlockContext ctx) {
 		currentContainer.pop();
 	}
 
