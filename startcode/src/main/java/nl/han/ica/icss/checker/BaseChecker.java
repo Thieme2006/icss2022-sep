@@ -97,24 +97,32 @@ public abstract class BaseChecker {
     }
 
     protected void handleSwitchCase(Switch switchCase) {
+        ExpressionType switchConditionType = getExpressionType(switchCase.condition);
+
         for(Case caseItem : switchCase.cases) {
-            validateSwitchCase(caseItem, switchCase.condition);
+            validateSwitchCase(caseItem, switchConditionType);
+        }
+
+        if(switchCase.defaultCase != null) {
+            for (ASTNode child : switchCase.defaultCase.body) {
+                walkThroughASTTree(child);
+            }
         }
     }
 
-    private void validateSwitchCase(Case caseNode, Expression condition) {
+    private void validateSwitchCase(Case caseNode, ExpressionType switchConditionType) {
         if(caseNode.condition instanceof Expression expression) {
             ExpressionType type = getExpressionType(expression);
 
-            ExpressionType switchConditionType = getExpressionType(condition);
-            if(!(switchConditionType == type)) {
-                caseNode.setError("Case \"" + type + "\" does not match the type of the switch condition \"" + switchConditionType + "\".");
+            if(switchConditionType != type) {
+                caseNode.setError(ErrorMessages.caseDoesNotMatchConditionType(type, switchConditionType));
+                return;
             }
         }
         validateNode(caseNode.condition);
 
-        for(ASTNode child : caseNode.body) {
-            validateNode(child);
+        for (ASTNode child : caseNode.body) {
+            walkThroughASTTree(child);
         }
     }
 

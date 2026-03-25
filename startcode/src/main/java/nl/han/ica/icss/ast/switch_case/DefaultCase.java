@@ -16,7 +16,7 @@ public class DefaultCase extends ASTNode {
 
     @Override
     public String getNodeLabel() {
-        return "default_case";
+        return "Default";
     }
 
     @Override

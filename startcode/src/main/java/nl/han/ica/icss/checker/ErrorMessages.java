@@ -45,4 +45,8 @@ public final class ErrorMessages {
     public static String invalidSizeType(String property, ExpressionType type) {
         return "Property \"" + property + "\" does not permit \"" + type + "\".";
     }
+
+    public static String caseDoesNotMatchConditionType(ExpressionType type, ExpressionType switchConditionType) {
+        return "Case \"" + type + "\" does not match the type of the switch condition \"" + switchConditionType + "\".";
+    }
 }

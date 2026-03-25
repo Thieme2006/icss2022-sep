@@ -27,7 +27,7 @@ public class Switch extends ASTNode {
 
     @Override
     public String getNodeLabel() {
-        return "switch_case";
+        return "Switch";
     }
 
     @Override

@@ -19,7 +19,7 @@ public class Case extends ASTNode {
 
     @Override
     public String getNodeLabel() {
-        return "case";
+        return "Case";
     }
 
     @Override
