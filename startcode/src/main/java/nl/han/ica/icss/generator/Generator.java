@@ -22,16 +22,16 @@ public class Generator {
 	}
 
 	private String generateStylerule(Stylerule stylerule) {
-		return stylerule.selectors.getFirst().toString() + " {" + generateDeclaration(stylerule.body) + "\n}";
+		return stylerule.selectors.getFirst().toString() + " {" + generateDeclaration(stylerule.body) + "\n}\n";
 	}
 
 	private String generateDeclaration(ArrayList<ASTNode> body) {
 		StringBuilder builder = new StringBuilder();
-		for(ASTNode childNode : body) {
-			if(childNode instanceof Declaration declaration) {
+		for (ASTNode childNode : body) {
+			if (childNode instanceof Declaration declaration) {
 				builder
-					.append("\n  ")
-					.append(declaration.property.name)
+						.append("\n  ")
+						.append(declaration.property.name)
 					.append(": ").append(generateExpression(declaration.expression))
 					.append(";");
 			}
