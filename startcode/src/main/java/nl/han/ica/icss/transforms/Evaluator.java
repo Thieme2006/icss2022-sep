@@ -75,6 +75,34 @@ public class Evaluator implements Transform {
         variableValues.removeFirst();
     }
 
+    private ArrayList<ASTNode> handleSwitchCaseValidation(Switch switchCase) {
+        Literal switchCondition = evaluateExpression(switchCase.condition);
+
+        ArrayList<ASTNode> result = new ArrayList<>();
+        for (Case caseItem : switchCase.cases) {
+            if(caseItem.condition instanceof Expression condition) {
+                Literal caseCondition = evaluateExpression(condition);
+
+                if (caseCondition.equals(switchCondition)) {
+                    variableValues.addFirst(new HashMap<>());
+
+                    for(ASTNode node : caseItem.body) {
+                        result.addAll(transformAstNode(node));
+                    }
+                    variableValues.removeFirst();
+                    return result;
+                }
+            }
+        }
+        if(switchCase.defaultCase != null) {
+            for(ASTNode node : switchCase.defaultCase.body) {
+                result.addAll(transformAstNode(node));
+            }
+        }
+
+        return result;
+    }
+
     private LinkedList<ASTNode> getRemainingASTNodes(LinkedList<ASTNode> processed) {
         LinkedList<ASTNode> remaining = new LinkedList<>();
         HashSet<String> viewedItems = new HashSet<>();
