@@ -224,6 +224,18 @@ public abstract class BaseChecker {
         if(type != ExpressionType.BOOL) {
             ifClause.setError(ErrorMessages.invalidIfCondition(ExpressionType.BOOL.name()));
         }
+
+        variableTypes.addFirst(new HashMap<>());
+        for(ASTNode child : ifClause.body) {
+            walkThroughASTTree(child);
+        }
+        variableTypes.removeFirst();
+
+        if(ifClause.elseClause != null) {
+            variableTypes.addFirst(new HashMap<>());
+            walkThroughASTTree(ifClause.elseClause);
+            variableTypes.removeFirst();
+        }
     }
     // =================================================================================================================
     // HELPER FUNCTIONS
