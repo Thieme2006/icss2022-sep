@@ -10,6 +10,8 @@ import nl.han.ica.icss.ast.literals.ScalarLiteral;
 import nl.han.ica.icss.ast.operations.AddOperation;
 import nl.han.ica.icss.ast.operations.MultiplyOperation;
 import nl.han.ica.icss.ast.operations.SubtractOperation;
+import nl.han.ica.icss.ast.switch_case.Case;
+import nl.han.ica.icss.ast.switch_case.Switch;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,24 +43,30 @@ public class Evaluator implements Transform {
         }
     }
 
+    private ArrayList<ASTNode> transformAstNode(ASTNode node) {
+        ArrayList<ASTNode> result = new ArrayList<>();
+        switch (node) {
+            case VariableAssignment va -> addVariableAssignmentToVariable(va);
+            case Declaration d -> result.add(createDeclaration((d)));
+            case IfClause i -> result.addAll(addIfClause(i));
+            case Switch s -> result.addAll(handleSwitchCaseValidation(s));
+            default -> throw new IllegalArgumentException("Unsupported node: " + node);
+        }
+        return result;
+    }
+
     private void transformStylerule(Stylerule stylerule) {
         variableValues.addFirst(new HashMap<>());
         LinkedList<ASTNode> processed = new LinkedList<>();
 
         for(ASTNode node : stylerule.body) {
-            switch(node) {
-                case VariableAssignment va -> addVariableAssignmentToVariable(va);
-                case IfClause ifClause -> processed.addAll(addIfClause(ifClause));
-                case Declaration declaration -> handleAddingDeclaration(declaration, processed);
-                default -> throw new RuntimeException("Unsupported node in stylerule: " + node);
-            }
+            processed.addAll(transformAstNode(node));
         }
+
         // Hierin kijk ik na of alle items wel geparsed zijn naar een Literal, als een gemist is dan geeft hij een exception.
         for(ASTNode node : processed) {
-            if(node instanceof Declaration d) {
-                if(!(d.expression instanceof Literal)) {
-                    throw new RuntimeException("Expression not evaluated: " + d);
-                }
+            if(node instanceof Declaration d && !(d.expression instanceof Literal)) {
+                    throw new IllegalArgumentException("Expression not evaluated: " + d);
             }
         }
 
@@ -83,14 +91,6 @@ public class Evaluator implements Transform {
             }
         }
         return remaining;
-    }
-
-    private void handleAddingDeclaration(Declaration declaration, LinkedList<ASTNode> processed) {
-        Declaration newDecl = new Declaration();
-        newDecl.property = declaration.property;
-        newDecl.expression = evaluateExpression(declaration.expression);
-
-        processed.add(newDecl);
     }
 
     private void addVariableAssignmentToVariable(VariableAssignment variableAssignment) {
@@ -158,12 +158,9 @@ public class Evaluator implements Transform {
 
     private Literal evaluateOperation(Operation operation) {
         return switch(operation) {
-            case AddOperation addOperation -> addLiteral(evaluateExpression(addOperation.lhs),
-                                                         evaluateExpression(addOperation.rhs));
-            case SubtractOperation subtractOperation -> minusLiteral(evaluateExpression(subtractOperation.lhs),
-                                                                     evaluateExpression(subtractOperation.rhs));
-            case MultiplyOperation multiplyOperation -> multiplyLiteral(evaluateExpression(multiplyOperation.lhs),
-                                                                        evaluateExpression(multiplyOperation.rhs));
+            case AddOperation addOperation -> addLiteral(evaluateExpression(addOperation.lhs), evaluateExpression(addOperation.rhs));
+            case SubtractOperation subtractOperation -> minusLiteral(evaluateExpression(subtractOperation.lhs), evaluateExpression(subtractOperation.rhs));
+            case MultiplyOperation multiplyOperation -> multiplyLiteral(evaluateExpression(multiplyOperation.lhs), evaluateExpression(multiplyOperation.rhs));
             default -> throw new IllegalStateException("Unknown operation.");
         };
     }
