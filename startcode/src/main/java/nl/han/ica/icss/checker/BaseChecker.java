@@ -21,6 +21,24 @@ public abstract class BaseChecker {
             "height", ExpressionTypes.SIZE
     ));
 
+    protected void walkThroughASTTree(ASTNode node) {
+        // ALs de node een IF, ELSE of STYLERULE is dan moet hij een nieuwe scope toevoegen.
+        if (node instanceof Scoped) {
+            variableTypes.addFirst(new HashMap<>());
+        }
+
+        validateNode(node);
+
+        for (ASTNode child : node.getChildren()) {
+            walkThroughASTTree(child);
+        }
+
+        // ALs de node een IF, ELSE of STYLERULE is dan moet hij de laatste scope verwijderen.
+        if (node instanceof Scoped) {
+            variableTypes.removeFirst();
+        }
+    }
+
     protected void validateNode(ASTNode node) {
         switch (node) {
             case VariableAssignment va -> handleValidation(va);
