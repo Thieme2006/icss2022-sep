@@ -6,6 +6,8 @@ import nl.han.ica.icss.ast.literals.BoolLiteral;
 import nl.han.ica.icss.ast.operations.AddOperation;
 import nl.han.ica.icss.ast.operations.MultiplyOperation;
 import nl.han.ica.icss.ast.operations.SubtractOperation;
+import nl.han.ica.icss.ast.switch_case.Case;
+import nl.han.ica.icss.ast.switch_case.Switch;
 import nl.han.ica.icss.ast.types.ExpressionType;
 
 import java.util.HashMap;
@@ -45,8 +47,15 @@ public abstract class BaseChecker {
             case VariableReference vr -> handleValidation(vr);
             case Declaration d -> check(d);
             case IfClause ifClause -> validateIfClause(ifClause);
+            case ElseClause elseClause -> validateElseClause(elseClause);
             case Switch s -> handleSwitchCase(s);
             default -> {}
+        }
+    }
+
+    private void validateElseClause(ElseClause elseClause) {
+        for (ASTNode child : elseClause.getChildren()) {
+            walkThroughASTTree(child);
         }
     }
 
