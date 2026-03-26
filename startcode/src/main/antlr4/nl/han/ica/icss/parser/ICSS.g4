@@ -53,7 +53,7 @@ NEQUALS: '!=';
 // Lexer
 // Comments in this file are for me to read over it again to understand whats happening :)
 
-// Lexer
+//--- PARSER: ---
 variable: CAPITAL_IDENT ASSIGNMENT_OPERATOR expression SEMICOLON;
 
 selector: ID_IDENT | CLASS_IDENT | LOWER_IDENT;
@@ -82,7 +82,6 @@ block: selector OPEN_BRACE bodyItem* CLOSE_BRACE;
 
 statement: variable | block;
 
-//--- PARSER: ---
 stylesheet: statement* EOF;
 
 switchCaseBlock: SWITCH BOX_BRACKET_OPEN expression BOX_BRACKET_CLOSE
@@ -91,5 +90,3 @@ switchCaseBlock: SWITCH BOX_BRACKET_OPEN expression BOX_BRACKET_CLOSE
 caseBlock: CASE expression COLON OPEN_BRACE bodyItem* CLOSE_BRACE;
 
 defaultBlock: SWITCH_DEFAULT COLON OPEN_BRACE bodyItem* CLOSE_BRACE;
-
-// TODO: mogelijk leuk om een switch case toe te voegen als parsing voor eigen implementatie :)
