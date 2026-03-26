@@ -25,17 +25,19 @@ public class Evaluator implements Transform {
     public void apply(AST ast) {
         this.variableValues = new HANLinkedList<>();
         this.variableValues.addFirst(new HashMap<>());
-        walkThroughASTTree(ast.root);
+        ast.root.body = walkThroughASTTree(ast.root);
     }
 
-    public void walkThroughASTTree(ASTNode node) {
+    public ArrayList<ASTNode> walkThroughASTTree(ASTNode node) {
+        ArrayList<ASTNode> result = new ArrayList<>();
         for(ASTNode childNode : node.getChildren()) {
             switch(childNode) {
-                case Stylerule rule -> transformStylerule(rule);
+                case Stylerule rule -> result.add(transformStylerule(rule));
                 case VariableAssignment va -> addVariableAssignmentToVariable(va);
                 default -> {}
             }
         }
+        return result;
     }
 
     private ArrayList<ASTNode> transformAstNode(ASTNode node) {
@@ -50,7 +52,7 @@ public class Evaluator implements Transform {
         return result;
     }
 
-    private void transformStylerule(Stylerule stylerule) {
+    private ASTNode transformStylerule(Stylerule stylerule) {
         variableValues.addFirst(new HashMap<>());
         LinkedList<ASTNode> processed = new LinkedList<>();
 
@@ -68,6 +70,8 @@ public class Evaluator implements Transform {
         LinkedList<ASTNode> unique = getRemainingASTNodes(processed);
         stylerule.body = new ArrayList<>(unique);
         variableValues.removeFirst();
+
+        return stylerule;
     }
 
     private ArrayList<ASTNode> handleSwitchCaseValidation(Switch switchCase) {
