@@ -115,10 +115,47 @@ public class ASTListener extends ICSSBaseListener {
 	@Override
 	public void enterIfClause(ICSSParser.IfClauseContext ctx) {
 		IfClause node = new IfClause();
-		node.conditionalExpression = createValue(ctx.value());
+		node.conditionalExpression = createIfCondition(ctx.if_condition());
 		currentContainer.peek().addChild(node);
 		currentContainer.push(node);
 	}
+
+	private Expression createIfCondition(ICSSParser.If_conditionContext ctx) {
+		if(ctx.TRUE() != null || ctx.FALSE() != null) {
+			return new BoolLiteral(ctx.getText());
+		} else if (ctx.comparison() != null) {
+			return createComparison(ctx.comparison());
+		} else if (ctx.value() != null) {
+			return createValue(ctx.value());
+		} else {
+			throw new IllegalStateException("Unknown condition: " + ctx.getText());
+		}
+	}
+
+	private Expression createComparison(ICSSParser.ComparisonContext ctx) {
+		if(ctx.value().size() == 1) {
+			return createValue(ctx.value(0));
+		}
+
+		Expression lhs = createValue(ctx.value(0));
+		Expression rhs = createValue(ctx.value(1));
+		String op = ctx.getChild(1).getText();
+
+		Operator operator = switch (op) {
+			case "==" -> Operator.EQ;
+			case "!=" -> Operator.NEQ;
+			case ">" -> Operator.GT;
+			case ">=" -> Operator.GTE;
+			case "<" -> Operator.ST;
+			case "<=" -> Operator.STE;
+			default -> throw new IllegalStateException("Unknown operator: " + op);
+		};
+
+		ComparisonOperation comparisonOperation = new ComparisonOperation(operator);
+		comparisonOperation.lhs = lhs;
+		comparisonOperation.rhs = rhs;
+		return comparisonOperation;
+    }
 
 	@Override
 	public void exitIfClause(ICSSParser.IfClauseContext ctx) {
