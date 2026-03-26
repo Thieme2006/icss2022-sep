@@ -3,13 +3,8 @@ package nl.han.ica.icss.transforms;
 import nl.han.ica.datastructures.HANLinkedList;
 import nl.han.ica.datastructures.IHANLinkedList;
 import nl.han.ica.icss.ast.*;
-import nl.han.ica.icss.ast.literals.BoolLiteral;
-import nl.han.ica.icss.ast.literals.PercentageLiteral;
-import nl.han.ica.icss.ast.literals.PixelLiteral;
-import nl.han.ica.icss.ast.literals.ScalarLiteral;
-import nl.han.ica.icss.ast.operations.AddOperation;
-import nl.han.ica.icss.ast.operations.MultiplyOperation;
-import nl.han.ica.icss.ast.operations.SubtractOperation;
+import nl.han.ica.icss.ast.literals.*;
+import nl.han.ica.icss.ast.operations.*;
 import nl.han.ica.icss.ast.switch_case.Case;
 import nl.han.ica.icss.ast.switch_case.Switch;
 
@@ -189,7 +184,54 @@ public class Evaluator implements Transform {
             case AddOperation addOperation -> addLiteral(evaluateExpression(addOperation.lhs), evaluateExpression(addOperation.rhs));
             case SubtractOperation subtractOperation -> minusLiteral(evaluateExpression(subtractOperation.lhs), evaluateExpression(subtractOperation.rhs));
             case MultiplyOperation multiplyOperation -> multiplyLiteral(evaluateExpression(multiplyOperation.lhs), evaluateExpression(multiplyOperation.rhs));
+            case ComparisonOperation comparisonOperation -> evaluateComparisonOperation(comparisonOperation);
             default -> throw new IllegalStateException("Unknown operation.");
+        };
+    }
+
+    private Literal evaluateComparisonOperation(ComparisonOperation operation) {
+        boolean result = compareLiterals(evaluateExpression(operation.lhs), evaluateExpression(operation.rhs), operation.operator);
+        return new BoolLiteral(result);
+    }
+
+    private static boolean compareLiterals(Literal left, Literal right, Operator op) {
+        if(left.getClass() != right.getClass()) {
+            throw new IllegalArgumentException("Cannot compare different literal types: " + left.getClass().getSimpleName() + " vs " + right.getClass().getSimpleName());
+        }
+
+        return switch(left) {
+            case PixelLiteral pxl when right instanceof PixelLiteral pxr -> compareNumbers(pxl.value, pxr.value, op);
+            case ScalarLiteral scl when right instanceof ScalarLiteral scr -> compareNumbers(scl.value, scr.value, op);
+            case PercentageLiteral percl when right instanceof PercentageLiteral percr -> compareNumbers(percl.value, percr.value, op);
+            case BoolLiteral bl when right instanceof BoolLiteral br -> compareBooleans(bl.value, br.value, op);
+            case ColorLiteral cl when right instanceof ColorLiteral cr -> compareColors(cl, cr, op);
+            default -> throw new IllegalStateException("Unsupported literal type for comparison: " + left.getClass().getSimpleName());
+        };
+    }
+
+    private static boolean compareColors(ColorLiteral left, ColorLiteral right, Operator op) {
+        if(op != Operator.EQ && op != Operator.NEQ) {
+            throw new IllegalArgumentException("Cannot compare colors with " + op);
+        }
+        return (op == Operator.EQ) == left.value.equals(right.value);
+    }
+
+    private static boolean compareNumbers(int left, int right, Operator op) {
+        return switch(op) {
+            case EQ -> left == right;
+            case NEQ -> left != right;
+            case GT -> left > right;
+            case GTE -> left >= right;
+            case ST -> left < right;
+            case STE -> left <= right;
+        };
+    }
+
+    private static boolean compareBooleans(boolean left, boolean right, Operator op) {
+        return switch(op) {
+            case EQ -> left == right;
+            case NEQ -> left != right;
+            default -> throw new IllegalArgumentException("Invalid boolean comparison: " + op);
         };
     }
 
