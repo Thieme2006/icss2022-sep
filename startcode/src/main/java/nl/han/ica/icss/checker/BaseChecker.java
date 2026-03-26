@@ -240,6 +240,11 @@ public abstract class BaseChecker {
         if (!lhs.equals(rhs)) {
             operation.setError("An comparison must have the same type on both sides: "
                     + lhs.name() + " vs " + rhs.name());
+            return;
+        }
+
+        if(lhs == ExpressionType.COLOR && rhs == ExpressionType.COLOR && operation.operator != Operator.EQ && operation.operator != Operator.NEQ) {
+                operation.setError("Colors can only be compared to each other with \"==\" or \"!=\".");
         }
     }
 
