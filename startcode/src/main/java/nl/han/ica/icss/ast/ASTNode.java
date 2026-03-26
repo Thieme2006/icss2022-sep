@@ -82,4 +82,10 @@ public class ASTNode {
         }
         return true;
     }
+
+    public void generate(StringBuilder builder) {
+        for(ASTNode child : getChildren()) {
+            child.generate(builder);
+        }
+    }
 }

@@ -29,7 +29,11 @@ public class TagSelector extends Selector {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(tag);
+    }
+
+    @Override
+    public void generate(StringBuilder builder) {
+        builder.append(tag);
     }
 }

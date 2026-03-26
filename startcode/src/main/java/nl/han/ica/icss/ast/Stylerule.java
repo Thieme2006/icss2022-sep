@@ -53,4 +53,15 @@ public class Stylerule extends ASTNode implements Scoped {
 	public int hashCode() {
 		return Objects.hash(selectors, body);
 	}
+
+	@Override
+	public void generate(StringBuilder builder) {
+		selectors.getFirst().generate(builder);
+		builder.append(" {\n");
+		for(ASTNode child : this.body) {
+			child.generate(builder);
+			builder.append("\n");
+		}
+		builder.append("}\n\n");
+	}
 }

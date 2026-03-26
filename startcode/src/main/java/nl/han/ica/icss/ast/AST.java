@@ -49,4 +49,11 @@ public class AST {
 	public int hashCode() {
 		return Objects.hash(root);
 	}
+
+	public String generate() {
+		StringBuilder builder = new StringBuilder();
+		root.generate(builder);
+
+		return builder.toString();
+	}
 }

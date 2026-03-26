@@ -37,4 +37,10 @@ public class PixelLiteral extends Literal {
     public ExpressionType getType() {
         return ExpressionType.PIXEL;
     }
+
+    @Override
+    public void generate(StringBuilder builder) {
+        builder.append(value);
+        builder.append("px");
+    }
 }
