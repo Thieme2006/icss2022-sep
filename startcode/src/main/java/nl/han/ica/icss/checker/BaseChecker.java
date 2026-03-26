@@ -4,6 +4,7 @@ import nl.han.ica.datastructures.IHANLinkedList;
 import nl.han.ica.icss.ast.*;
 import nl.han.ica.icss.ast.literals.BoolLiteral;
 import nl.han.ica.icss.ast.operations.AddOperation;
+import nl.han.ica.icss.ast.operations.ComparisonOperation;
 import nl.han.ica.icss.ast.operations.MultiplyOperation;
 import nl.han.ica.icss.ast.operations.SubtractOperation;
 import nl.han.ica.icss.ast.switch_case.Case;
@@ -227,10 +228,29 @@ public abstract class BaseChecker {
         }
     }
 
+    private void validateComparisonOperation(ComparisonOperation operation) {
+        ExpressionType lhs = getExpressionType(operation.lhs);
+        ExpressionType rhs = getExpressionType(operation.rhs);
+
+        if(lhs == null || rhs == null) {
+            operation.setError("Unknown literal type on one side of the comparison");
+            return;
+        }
+
+        if (!lhs.equals(rhs)) {
+            operation.setError("An comparison must have the same type on both sides: "
+                    + lhs.name() + " vs " + rhs.name());
+        }
+    }
+
     protected void validateIfClause(IfClause ifClause) {
-        ExpressionType type = getExpressionType(ifClause.conditionalExpression);
-        if(type != ExpressionType.BOOL) {
-            ifClause.setError(ErrorMessages.invalidIfCondition(ExpressionType.BOOL.name()));
+        if(ifClause.conditionalExpression instanceof ComparisonOperation comparisonOperation) {
+            validateComparisonOperation(comparisonOperation);
+        } else {
+            ExpressionType type = getExpressionType(ifClause.conditionalExpression);
+            if(type != ExpressionType.BOOL) {
+                ifClause.setError(ErrorMessages.invalidIfCondition(ExpressionType.BOOL.name()));
+            }
         }
 
         variableTypes.addFirst(new HashMap<>());
