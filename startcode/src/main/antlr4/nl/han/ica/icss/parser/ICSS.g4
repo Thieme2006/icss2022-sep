@@ -43,6 +43,12 @@ PLUS: '+';
 MIN: '-';
 MUL: '*';
 ASSIGNMENT_OPERATOR: ':=';
+EQUALS: '==';
+GT: '>';
+ST: '<';
+GTE: '>=';
+STE: '<=';
+NEQUALS: '!=';
 
 // Lexer
 // Comments in this file are for me to read over it again to understand whats happening :)
@@ -60,9 +66,13 @@ expression: term ((PLUS | MIN) term)*;
 
 bodyItem: declaration | ifClause | variable | switchCaseBlock;
 
-ifClause   : IF BOX_BRACKET_OPEN value BOX_BRACKET_CLOSE
+ifClause   : IF BOX_BRACKET_OPEN if_condition BOX_BRACKET_CLOSE
              OPEN_BRACE bodyItem* CLOSE_BRACE
              elseClause? ;
+
+comparison: value (EQUALS | NEQUALS | GT | GTE | ST | STE) value;
+
+if_condition: comparison | TRUE | FALSE | value;
 
 elseClause : ELSE OPEN_BRACE bodyItem* CLOSE_BRACE ;
 
