@@ -2,8 +2,6 @@ package nl.han.ica.icss.checker;
 
 import nl.han.ica.datastructures.HANLinkedList;
 import nl.han.ica.icss.ast.*;
-import nl.han.ica.icss.ast.switch_case.Switch;
-
 import java.util.HashMap;
 
 public class Checker extends BaseChecker {
@@ -17,6 +15,4 @@ public class Checker extends BaseChecker {
          this.variableTypes.addFirst(new HashMap<>());
          walkThroughASTTree(ast.root);
     }
-
-
 }
