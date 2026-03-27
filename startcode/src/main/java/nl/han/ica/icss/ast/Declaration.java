@@ -56,6 +56,7 @@ public class Declaration extends ASTNode {
 		return Objects.hash(property, expression);
 	}
 
+	// Helper function voor het genereren van een CSS output.
 	@Override
 	public void generate(StringBuilder builder) {
 		builder.append("  ");

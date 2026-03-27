@@ -50,6 +50,7 @@ public class AST {
 		return Objects.hash(root);
 	}
 
+	// Helper function voor het genereren van een CSS output.
 	public String generate() {
 		StringBuilder builder = new StringBuilder();
 		root.generate(builder);

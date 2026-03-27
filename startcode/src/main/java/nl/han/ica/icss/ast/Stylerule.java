@@ -1,5 +1,7 @@
 package nl.han.ica.icss.ast;
 
+import nl.han.ica.icss.ast.types.Scoped;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -54,6 +56,7 @@ public class Stylerule extends ASTNode implements Scoped {
 		return Objects.hash(selectors, body);
 	}
 
+	// Helper function voor het genereren van een CSS output.
 	@Override
 	public void generate(StringBuilder builder) {
 		selectors.getFirst().generate(builder);

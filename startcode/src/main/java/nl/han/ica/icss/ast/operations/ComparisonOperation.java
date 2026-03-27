@@ -10,6 +10,7 @@ public class ComparisonOperation extends Operation {
         this.operator = operator;
     }
 
+    // Afhankelijk van de operator die een comparison heeft wordt een node label gegenereerd.
     @Override
     public String getNodeLabel() {
         return switch (this.operator) {

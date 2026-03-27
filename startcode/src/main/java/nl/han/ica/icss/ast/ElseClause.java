@@ -1,5 +1,7 @@
 package nl.han.ica.icss.ast;
 
+import nl.han.ica.icss.ast.types.Scoped;
+
 import java.util.ArrayList;
 import java.util.Objects;
 

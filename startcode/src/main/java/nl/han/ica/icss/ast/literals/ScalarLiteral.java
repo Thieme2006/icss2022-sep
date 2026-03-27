@@ -38,6 +38,7 @@ public class ScalarLiteral extends Literal {
         return ExpressionType.SCALAR;
     }
 
+    // Helper function voor het genereren van een CSS output.
     @Override
     public void generate(StringBuilder builder) {
         builder.append(value);

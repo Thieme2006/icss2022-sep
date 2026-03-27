@@ -4,7 +4,6 @@ import nl.han.ica.icss.ast.ASTNode;
 import nl.han.ica.icss.ast.Expression;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class Switch extends ASTNode {
 

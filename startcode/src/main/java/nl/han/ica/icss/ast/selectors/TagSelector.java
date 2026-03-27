@@ -32,6 +32,7 @@ public class TagSelector extends Selector {
         return Objects.hash(tag);
     }
 
+    // Helper function voor het genereren van een CSS output.
     @Override
     public void generate(StringBuilder builder) {
         builder.append(tag);

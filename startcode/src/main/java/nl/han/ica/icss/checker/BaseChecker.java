@@ -7,6 +7,7 @@ import nl.han.ica.icss.ast.operations.*;
 import nl.han.ica.icss.ast.switch_case.Case;
 import nl.han.ica.icss.ast.switch_case.Switch;
 import nl.han.ica.icss.ast.types.ExpressionType;
+import nl.han.ica.icss.ast.types.Scoped;
 
 import java.util.HashMap;
 import java.util.Map;

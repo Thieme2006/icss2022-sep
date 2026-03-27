@@ -39,6 +39,7 @@ public class BoolLiteral extends Literal {
         return ExpressionType.BOOL;
     }
 
+    // Helper function voor het genereren van een CSS output.
     @Override
     public void generate(StringBuilder builder) {
         builder.append(value);

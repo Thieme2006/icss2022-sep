@@ -83,6 +83,7 @@ public class ASTNode {
         return true;
     }
 
+    // Helper function voor het genereren van een CSS output.
     public void generate(StringBuilder builder) {
         for(ASTNode child : getChildren()) {
             child.generate(builder);

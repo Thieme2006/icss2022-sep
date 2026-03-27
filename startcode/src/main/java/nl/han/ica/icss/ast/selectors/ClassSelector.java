@@ -33,6 +33,7 @@ public class ClassSelector extends Selector {
         return Objects.hash(cls);
     }
 
+    // Helper function voor het genereren van een CSS output.
     @Override
     public void generate(StringBuilder builder) {
         builder.append(cls);
