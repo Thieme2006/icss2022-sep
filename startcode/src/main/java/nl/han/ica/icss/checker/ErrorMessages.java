@@ -4,7 +4,8 @@ import nl.han.ica.icss.ast.types.ExpressionType;
 
 public final class ErrorMessages {
 
-    private ErrorMessages() {}
+    private ErrorMessages() {
+    }
 
     public static String variableNotDefined(String name) {
         return "Variable \"" + name + "\" is not defined";

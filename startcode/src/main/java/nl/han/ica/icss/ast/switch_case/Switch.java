@@ -11,7 +11,8 @@ public class Switch extends ASTNode {
     public ArrayList<Case> cases = new ArrayList<>();
     public DefaultCase defaultCase; // Kan null zijn.
 
-    public Switch() { }
+    public Switch() {
+    }
 
     public Switch(Expression condition, ArrayList<Case> cases) {
         this.condition = condition;
@@ -34,7 +35,7 @@ public class Switch extends ASTNode {
         ArrayList<ASTNode> children = new ArrayList<>();
         children.add(condition);
         children.addAll(cases);
-        if(defaultCase != null) children.add(defaultCase);
+        if (defaultCase != null) children.add(defaultCase);
 
         return children;
     }

@@ -8,7 +8,8 @@ import java.util.Objects;
 public class DefaultCase extends ASTNode {
     public ArrayList<ASTNode> body = new ArrayList<>();
 
-    public DefaultCase() { }
+    public DefaultCase() {
+    }
 
     public DefaultCase(ArrayList<ASTNode> body) {
         this.body = body;
@@ -31,9 +32,9 @@ public class DefaultCase extends ASTNode {
 
     @Override
     public boolean equals(Object o) {
-        if(this == o) return true;
+        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if(!super.equals(o)) return false;
+        if (!super.equals(o)) return false;
         DefaultCase defaultCase = (DefaultCase) o;
         return Objects.equals(body, defaultCase.body);
     }

@@ -27,11 +27,12 @@ public class Evaluator extends BaseTransformer implements Transform {
 
     private ArrayList<ASTNode> walkThroughASTTree(ASTNode node) {
         ArrayList<ASTNode> result = new ArrayList<>();
-        for(ASTNode childNode : node.getChildren()) {
-            switch(childNode) {
+        for (ASTNode childNode : node.getChildren()) {
+            switch (childNode) {
                 case Stylerule rule -> result.add(transformStylerule(rule));
                 case VariableAssignment va -> addVariableAssignmentToVariable(va);
-                default -> {}
+                default -> {
+                }
             }
         }
         return result;

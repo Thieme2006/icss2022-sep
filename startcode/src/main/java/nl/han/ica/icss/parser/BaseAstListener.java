@@ -24,7 +24,7 @@ public class BaseAstListener {
     public Expression createExpression(ICSSParser.ExpressionContext ctx) {
         Expression result = createTerm(ctx.term(0));
 
-        for(int i = 1; i < ctx.term().size(); i++) {
+        for (int i = 1; i < ctx.term().size(); i++) {
             Expression right = createTerm(ctx.term(i));
 
             switch (ctx.getChild(2 * i - 1).getText()) {
@@ -48,7 +48,7 @@ public class BaseAstListener {
     public Expression createTerm(ICSSParser.TermContext ctx) {
         Expression result = createValue(ctx.value(0));
 
-        for(int i = 1; i < ctx.value().size(); i++) {
+        for (int i = 1; i < ctx.value().size(); i++) {
             Expression right = createValue(ctx.value(i));
 
             MultiplyOperation op = new MultiplyOperation();
@@ -74,7 +74,7 @@ public class BaseAstListener {
     }
 
     public Expression createIfCondition(ICSSParser.If_conditionContext ctx) {
-        if(ctx.TRUE() != null || ctx.FALSE() != null) {
+        if (ctx.TRUE() != null || ctx.FALSE() != null) {
             return new BoolLiteral(ctx.getText());
         } else if (ctx.comparison() != null) {
             return createComparison(ctx.comparison());
@@ -86,7 +86,7 @@ public class BaseAstListener {
     }
 
     public Expression createComparison(ICSSParser.ComparisonContext ctx) {
-        if(ctx.value().size() == 1) {
+        if (ctx.value().size() == 1) {
             return createValue(ctx.value(0));
         }
 

@@ -1,16 +1,18 @@
 package nl.han.ica.icss.ast.switch_case;
 
 import nl.han.ica.icss.ast.ASTNode;
+import nl.han.ica.icss.ast.types.Scoped;
 
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class Case extends ASTNode {
+public class Case extends ASTNode implements Scoped {
 
     public ASTNode condition;
     public ArrayList<ASTNode> body = new ArrayList<>();
 
-    public Case() { }
+    public Case() {
+    }
 
     public Case(ASTNode condition, ArrayList<ASTNode> body) {
         this.condition = condition;
@@ -32,9 +34,9 @@ public class Case extends ASTNode {
 
     @Override
     public boolean equals(Object o) {
-        if(this == o) return true;
-        if(o == null || getClass() != o.getClass()) return false;
-        if(!super.equals(o)) return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         Case caseNode = (Case) o;
         return Objects.equals(condition, caseNode.condition) &&
                 Objects.equals(body, caseNode.body);
