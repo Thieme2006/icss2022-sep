@@ -1,7 +1,13 @@
 .p {
     switch [10px] {
       case 10px: {
+        TESTVAR := 10px;
         width: 100px;
+        if[100px < 110px] {
+            width: TESTVAR;
+        } else {
+            width: TESTVAR - 5px;
+        }
       }
 
       case 20px: {

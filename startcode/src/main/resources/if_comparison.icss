@@ -1,0 +1,35 @@
+.p {
+    if[10px > 5px]{
+        width: 5 * 15px;
+    } else {
+        width: 1px;
+    }
+    if[5px < 10px]{
+        height: 10px;
+    } else {
+        height: 15px;
+    }
+    if[5% != 6%]{
+        color: #00ff00;
+    } else {
+        color: #ff00ff;
+    }
+    if[5% == 5%]{
+        background-color: #00ff00;
+    } else {
+        background-color: #ff00ff;
+    }
+}
+
+menu {
+    if[10px >= 10px]{
+        width: 10 * 15px;
+    } else {
+        width: 10px;
+    }
+    if[10px <= 15px]{
+        height: 100px;
+    } else {
+        height: 15px;
+    }
+}
