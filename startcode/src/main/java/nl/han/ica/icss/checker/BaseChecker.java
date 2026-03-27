@@ -42,9 +42,9 @@ public abstract class BaseChecker {
 
     protected void validateNode(ASTNode node) {
         switch (node) {
-            case VariableAssignment va -> handleValidation(va);
-            case VariableReference vr -> handleValidation(vr);
-            case Declaration d -> check(d);
+            case VariableAssignment va -> validateVariableAssignment(va);
+            case VariableReference vr -> validateVariableReference(vr);
+            case Declaration d -> validateDeclaration(d);
             case IfClause ifClause -> validateIfClause(ifClause);
             case ElseClause elseClause -> validateElseClause(elseClause);
             case Switch s -> handleSwitchCase(s);
@@ -58,15 +58,15 @@ public abstract class BaseChecker {
         }
     }
 
-    protected void check(Declaration declaration) {
-        ExpressionTypes expressionGroup = validProperties.get(declaration.property.name);
+    protected void validateDeclaration(Declaration declaration) {
+        ExpressionTypes expressionType = validProperties.get(declaration.property.name);
 
-        if(expressionGroup == null) {
+        if(expressionType == null) {
             declaration.setError(ErrorMessages.invalidProperty(declaration.property.name));
             return;
         }
 
-        switch(expressionGroup) {
+        switch(expressionType) {
             case COLOR ->  validateColorProperty(declaration);
             case SIZE -> validateSizeDeclaration(declaration);
         }
@@ -76,14 +76,14 @@ public abstract class BaseChecker {
     // VALIDATORS
     // =================================================================================================================
 
-    protected void handleValidation(VariableAssignment variableAssignment) {
+    protected void validateVariableAssignment(VariableAssignment variableAssignment) {
         ExpressionType type = getExpressionType(variableAssignment.expression);
 
         if (type == null) {
             variableAssignment.setError(ErrorMessages.variableNotDefined(variableAssignment.name.name));
             return;
         }
-        // UndefinedVariables die gereturned worden hebben altijd al een variabele.
+        // UndefinedVariables die gereturned worden hebben altijd al een error.
         if(type == ExpressionType.UNDEFINED) {
             return;
         }
@@ -91,7 +91,7 @@ public abstract class BaseChecker {
         variableTypes.getFirst().put(variableAssignment.name.name, type);
     }
 
-    protected void handleValidation(VariableReference variableReference) {
+    protected void validateVariableReference(VariableReference variableReference) {
         addErrorIfVariableNotDefined(variableReference, variableReference.name);
     }
 
@@ -129,25 +129,18 @@ public abstract class BaseChecker {
     // VALIDATION HELPERS
     // =================================================================================================================
 
-    protected boolean addErrorIfVariableNotDefined(ASTNode node, String variableName) {
+    protected void addErrorIfVariableNotDefined(ASTNode node, String variableName) {
         ExpressionType type = getVariableTypeFromName(variableName);
         if (type == null) {
             node.setError(ErrorMessages.variableNotDefined(variableName));
-            return false;
         }
-        return true;
     }
 
     public void validateColorProperty(Declaration colorDeclaration) {
         ExpressionType type = getExpressionType(colorDeclaration.expression);
 
         if(type != ExpressionType.COLOR) {
-            colorDeclaration.setError(
-                    ErrorMessages.wrongPropertyType(
-                            colorDeclaration.property.name,
-                            ExpressionType.COLOR,
-                            type));
-            return;
+            colorDeclaration.setError(ErrorMessages.invalidPropertyDeclarationType(colorDeclaration.property.name, type));
         }
     }
 
@@ -172,14 +165,14 @@ public abstract class BaseChecker {
         }
 
         if(left == ExpressionType.COLOR || right == ExpressionType.COLOR) {
-            operation.setError("A color is not allowed to be used in an operation.");
+            operation.setError(ErrorMessages.colorNotAllowedInOperation());
             return ExpressionType.UNDEFINED;
         }
 
         return switch(operation) {
-            case MultiplyOperation ignore1 -> validateMultiplyOperation(operation, left, right);
-            case AddOperation ignore2 -> validateAddOrSubtractOperation(operation, left, right);
-            case SubtractOperation ignore3 -> validateAddOrSubtractOperation(operation, left, right);
+            case MultiplyOperation m -> validateMultiplyOperation(operation, left, right);
+            case AddOperation a -> validateAddOrSubtractOperation(operation, left, right);
+            case SubtractOperation s -> validateAddOrSubtractOperation(operation, left, right);
             default -> ExpressionType.UNDEFINED;
         };
     }
@@ -190,11 +183,7 @@ public abstract class BaseChecker {
             return ExpressionType.UNDEFINED;
         }
 
-        if(isScalar(left)) {
-            return right;
-        } else {
-            return left;
-        }
+        return isScalar(left) ? right : left;
     }
 
     protected ExpressionType validateAddOrSubtractOperation(Operation operation, ExpressionType left, ExpressionType right) {
@@ -222,7 +211,7 @@ public abstract class BaseChecker {
         }
 
         if(expressionType != ExpressionType.PERCENTAGE && expressionType != ExpressionType.PIXEL) {
-            expression.setError(ErrorMessages.invalidSizeType(propertyName, expressionType));
+            expression.setError(ErrorMessages.invalidPropertyDeclarationType(propertyName, expressionType));
         }
     }
 
@@ -231,18 +220,17 @@ public abstract class BaseChecker {
         ExpressionType rhs = getExpressionType(operation.rhs);
 
         if(lhs == null || rhs == null) {
-            operation.setError("Unknown literal type on one side of the comparison");
+            operation.setError(ErrorMessages.unknownLiteralTypeOnComparisonOperation());
             return;
         }
 
         if (!lhs.equals(rhs)) {
-            operation.setError("An comparison must have the same type on both sides: "
-                    + lhs.name() + " vs " + rhs.name());
+            operation.setError(ErrorMessages.comparisonOperationDoesNotHaveTheSameTypes(lhs.name(), rhs.name()));
             return;
         }
 
         if(lhs == ExpressionType.COLOR && rhs == ExpressionType.COLOR && operation.operator != Operator.EQ && operation.operator != Operator.NEQ) {
-                operation.setError("Colors can only be compared to each other with \"==\" or \"!=\".");
+                operation.setError(ErrorMessages.colorComparisonNotAllowed());
         }
     }
 
@@ -268,9 +256,6 @@ public abstract class BaseChecker {
             variableTypes.removeFirst();
         }
     }
-    // =================================================================================================================
-    // HELPER FUNCTIONS
-    // =================================================================================================================
 
     protected ExpressionType getExpressionType(Expression expression) {
         return switch (expression) {

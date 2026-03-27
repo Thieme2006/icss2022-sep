@@ -18,10 +18,6 @@ public final class ErrorMessages {
         return "Property \"" + property + "\" is not allowed.";
     }
 
-    public static String wrongPropertyType(String property, ExpressionType expected, ExpressionType actual) {
-        return "Property \"" + property + "\" expects \"" + expected + "\" but got \"" + actual + "\".";
-    }
-
     public static String mixedTypes(ExpressionType left, ExpressionType right) {
         return "It's not permitted to mix different non-scalar types \"" + left + "\" and \"" + right + "\" in an operation.";
     }
@@ -42,11 +38,28 @@ public final class ErrorMessages {
         return "Using 2 non-scalar literals is not permitted in an multiplicative operation.";
     }
 
-    public static String invalidSizeType(String property, ExpressionType type) {
+    public static String invalidPropertyDeclarationType(String property, ExpressionType type) {
         return "Property \"" + property + "\" does not permit \"" + type + "\".";
     }
 
     public static String caseDoesNotMatchConditionType(ExpressionType type, ExpressionType switchConditionType) {
         return "Case \"" + type + "\" does not match the type of the switch condition \"" + switchConditionType + "\".";
+    }
+
+    public static String colorNotAllowedInOperation() {
+        return "Colors are not allowed to be used in an operation. (Add, Subtract, Multiply).";
+    }
+
+    public static String comparisonOperationDoesNotHaveTheSameTypes(String type1, String type2) {
+        return "An comparison operation must have the same literal types on either side of the comparison \nExpected: \""
+                + type1 + "\" or \"" + type2 + "\"\nReceived: \"" + type1 + "\" and \"" + type2 + "\".";
+    }
+
+    public static String unknownLiteralTypeOnComparisonOperation() {
+        return "There is an unknown literal type on either side of the comparison operation.";
+    }
+
+    public static String colorComparisonNotAllowed() {
+        return "Colors can only be compared to each other with \"==\" or \"!=\".";
     }
 }
