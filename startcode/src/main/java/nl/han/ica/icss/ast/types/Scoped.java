@@ -1,4 +1,4 @@
-package nl.han.ica.icss.ast;
+package nl.han.ica.icss.ast.types;
 
 // Scoped is a interface to help figure out if an block should get a new scope or not.
 // e.g.
