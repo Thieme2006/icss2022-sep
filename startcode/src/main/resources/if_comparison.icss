@@ -32,4 +32,14 @@ menu {
     } else {
         height: 15px;
     }
+    if[#ff00ff == #ff00ff]{
+        color: #ff00ff;
+    } else {
+        color: #00ff00;
+    }
+    if[#00ff00 != #ff00ff]{
+        background-color: #ff00ff;
+    } else {
+        background-color: #00ff00;
+    }
 }

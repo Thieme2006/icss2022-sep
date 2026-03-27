@@ -52,8 +52,8 @@ public final class ErrorMessages {
     }
 
     public static String comparisonOperationDoesNotHaveTheSameTypes(String type1, String type2) {
-        return "An comparison operation must have the same literal types on either side of the comparison \nExpected: \""
-                + type1 + "\" or \"" + type2 + "\"\nReceived: \"" + type1 + "\" and \"" + type2 + "\".";
+        return "An comparison operation must have the same literal types on either side of the comparison \nExpected: 2x \""
+                + type1 + "\" or 2x \"" + type2 + "\"\nReceived: \"" + type1 + "\" and \"" + type2 + "\".";
     }
 
     public static String unknownLiteralTypeOnComparisonOperation() {
@@ -61,6 +61,6 @@ public final class ErrorMessages {
     }
 
     public static String colorComparisonNotAllowed() {
-        return "Colors can only be compared to each other with \"==\" or \"!=\".";
+        return "Colors can only be compared to each other with \"==\" (Equal) or \"!=\" (Not Equal).";
     }
 }
